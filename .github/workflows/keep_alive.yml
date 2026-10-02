@@ -1,0 +1,23 @@
+name: Streamlit Keep Alive
+
+on:
+  schedule:
+    # 한국 시간(KST) 기준으로 약 10시간마다 주기적으로 자동 실행
+    - cron: '0 */10 * * *'
+  workflow_dispatch: # 사용자가 원할 때 언제든 수동으로 실행 가능
+
+jobs:
+  auto_commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 리포지토리에 커밋을 남기기 위한 권한 명시
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create Empty Commit
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "Chore: Keep Streamlit App Awake"
+          git push
